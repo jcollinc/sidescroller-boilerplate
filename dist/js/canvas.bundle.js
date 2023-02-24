@@ -120,11 +120,11 @@ console.log(_assets_platform_png__WEBPACK_IMPORTED_MODULE_0__["default"]); //Set
 
 var canvas = document.querySelector('canvas');
 var c = canvas.getContext("2d");
-canvas.width = innerWidth;
-canvas.height = innerHeight; // Set gravity strength
+canvas.width = 1024;
+canvas.height = 576; // Set gravity strength
 
 var gravity = .5;
-var movementSpeed = 2;
+var movementSpeed = 2; // Classes 
 
 var Player = /*#__PURE__*/function () {
   function Player() {
@@ -167,7 +167,8 @@ var Player = /*#__PURE__*/function () {
 var Platform = /*#__PURE__*/function () {
   function Platform(_ref) {
     var x = _ref.x,
-        y = _ref.y;
+        y = _ref.y,
+        image = _ref.image;
 
     _classCallCheck(this, Platform);
 
@@ -175,28 +176,33 @@ var Platform = /*#__PURE__*/function () {
       x: x,
       y: y
     };
-    this.width = 200;
-    this.height = 20;
+    this.image = image;
+    this.width = image.width;
+    this.height = image.height;
   }
 
   _createClass(Platform, [{
     key: "draw",
     value: function draw() {
-      c.fillStyle = 'brown';
-      c.fillRect(this.position.x, this.position.y, this.width, this.height);
+      c.drawImage(this.image, this.position.x, this.position.y);
     }
   }]);
 
   return Platform;
-}();
+}(); // Create class  instances
+
 
 var player = new Player();
+var image = new Image();
+image.src = _assets_platform_png__WEBPACK_IMPORTED_MODULE_0__["default"];
 var platforms = [new Platform({
-  x: 200,
-  y: 500
+  x: -1,
+  y: 450,
+  image: image
 }), new Platform({
   x: 500,
-  y: 400
+  y: 450,
+  image: image
 })]; // State to manage left and right movement
 
 var keys = {
@@ -212,15 +218,16 @@ var scrollOffset = 0; // Animation loop
 
 function animate() {
   requestAnimationFrame(animate);
-  c.clearRect(0, 0, canvas.width, canvas.height);
-  player.update();
+  c.fillStyle = "skyblue";
+  c.fillRect(0, 0, canvas.width, canvas.height);
 
   for (var _i = 0, _platforms = platforms; _i < _platforms.length; _i++) {
     var _platform = _platforms[_i];
 
     _platform.draw();
-  } // Movement on x-axis and side-scrolling behavior
+  }
 
+  player.update(); // Movement on x-axis and side-scrolling behavior
 
   if (keys.right.pressed && player.position.x < 300) player.velocity.x = movementSpeed;else if (keys.left.pressed && player.position.x > 0) player.velocity.x = -movementSpeed;else {
     player.velocity.x = 0;

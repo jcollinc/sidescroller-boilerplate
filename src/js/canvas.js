@@ -2,15 +2,18 @@ import platform from '../assets/platform.png'
 console.log(platform)
 
 //Set the stage...
+
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext("2d")
-canvas.width = innerWidth
-canvas.height = innerHeight
+canvas.width = 1024
+canvas.height = 576
 
 // Set gravity strength
+
 const gravity = .5
 const movementSpeed = 2
 
+// Classes 
 class Player {
   constructor() {
     this.position = {
@@ -46,27 +49,30 @@ class Player {
 }
 
 class Platform {
-  constructor({ x, y }) {
+  constructor({ x, y, image }) {
     this.position = { x, y } 
-    this.width = 200
-    this.height = 20
+    this.image = image
+    this.width = image.width
+    this.height = image.height
+    
   }
 
   draw() {
-    c.fillStyle = 'brown'
-    c.fillRect(
-      this.position.x, 
-      this.position.y,
-      this.width,
-      this.height  
-    )
+    c.drawImage(this.image, this.position.x, this.position.y)
   }
 }
 
+// Create class  instances
+
 const player = new Player()
-const platforms = [new Platform({x:200, y:500}), new Platform({x:500, y:400})]
+
+const image = new Image()
+image.src = platform
+
+const platforms = [new Platform({x:-1, y:450, image}), new Platform({x:500, y:450, image})]
 
 // State to manage left and right movement
+
 const keys = {
   right: {
     pressed: false
@@ -77,18 +83,22 @@ const keys = {
 }
 
 // Win scenario
+
 let scrollOffset = 0
 
 // Animation loop
+
 function animate() {
   requestAnimationFrame(animate)
-  c.clearRect(0, 0, canvas.width, canvas.height)
-  player.update()
+  c.fillStyle = "skyblue"
+  c.fillRect(0, 0, canvas.width, canvas.height)
   for (let platform of platforms) {
     platform.draw()
   }
-  
+  player.update()
+
 // Movement on x-axis and side-scrolling behavior
+
   if (keys.right.pressed && player.position.x < 300) player.velocity.x = movementSpeed
   else if (keys.left.pressed && player.position.x > 0) player.velocity.x = -movementSpeed
   else {
@@ -102,6 +112,7 @@ function animate() {
   }
 
 //Platform collision detection
+
   for (let platform of platforms) {
     platform.draw()
     if (
@@ -121,6 +132,7 @@ function animate() {
 animate()
 
 // Event handling for WASD and arrow keydowns
+
 window.addEventListener('keydown', ({ keyCode }) => {
   console.log(keyCode)
   switch (keyCode) {
