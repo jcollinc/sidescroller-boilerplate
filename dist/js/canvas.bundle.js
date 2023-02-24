@@ -229,7 +229,7 @@ function animate() {
 
   player.update(); // Movement on x-axis and side-scrolling behavior
 
-  if (keys.right.pressed && player.position.x < 300) player.velocity.x = movementSpeed;else if (keys.left.pressed && player.position.x > 0) player.velocity.x = -movementSpeed;else {
+  if (keys.right.pressed && player.position.x < 450) player.velocity.x = movementSpeed;else if (keys.left.pressed && player.position.x > 0) player.velocity.x = -movementSpeed;else {
     player.velocity.x = 0;
 
     if (keys.right.pressed) {
